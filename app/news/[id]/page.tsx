@@ -1,6 +1,6 @@
-// "use client";
 import useSWR from "swr";
 import Image from "next/image";
+import { PARAMS } from "@/app/parameter";
 
 type microCmsResponse = {
   id: string;
@@ -17,10 +17,11 @@ type microCmsResponse = {
   };
 };
 
-async function getData(id: string) {
+async function getData(id: string): Promise<microCmsResponse> {
+  console.log(PARAMS.X_MICROCMS_API_KEY);
   const res = await fetch(`https://mtaobflz22.microcms.io/api/v1/news/${id}`, {
     headers: {
-      "X-MICROCMS-API-KEY": process.env.X_MICROCMS_API_KEY ?? "",
+      "X-MICROCMS-API-KEY": PARAMS.X_MICROCMS_API_KEY,
     },
   });
 
@@ -31,11 +32,6 @@ async function getData(id: string) {
 }
 
 export default async function Home({ params }: { params: { id: string } }) {
-  // const { data: response, error } = useSWR(
-  //   `https://mtaobflz22.microcms.io/api/v1/news/${params.id}`,
-  //   fetcher
-  // );
-
   const data = await getData(params.id);
   console.log(params.id);
   console.log(data);
